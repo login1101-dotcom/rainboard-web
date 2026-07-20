@@ -786,13 +786,6 @@
       border-radius: var(--radius) !important;
       border-top: 1px solid var(--border) !important;
     }
-    .post .pr {
-      display: grid !important;
-      grid-template-columns: auto 1fr !important;
-      grid-template-rows: auto auto auto !important;
-      gap: 6px 10px !important;
-      padding: 12px 14px !important;
-    }
     #bCrumb {
       white-space: nowrap !important;
       font-size: 12px !important;
@@ -806,36 +799,57 @@
       font-size: 12px !important;
       flex-shrink: 0 !important;
     }
+    .post .pr {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 6px 10px !important;
+      padding: 8px 12px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      min-width: 0 !important;
+    }
     .post .no {
-      grid-column: 1 !important;
-      grid-row: 1 !important;
+      grid-column: unset !important;
+      grid-row: unset !important;
+      flex-shrink: 0 !important;
       font-size: 11px !important;
     }
     .post .c-area, .post .when {
       display: none !important;
     }
     .post .c-tag {
-      grid-column: 2 !important;
-      grid-row: 1 !important;
-      justify-self: start !important;
+      grid-column: unset !important;
+      grid-row: unset !important;
+      justify-self: unset !important;
+      flex-shrink: 0 !important;
     }
     .post .title {
-      grid-column: 1 / span 2 !important;
-      grid-row: 2 !important;
-      font-size: 14.5px !important;
-      white-space: normal !important;
-      word-break: break-all !important;
+      grid-column: unset !important;
+      grid-row: unset !important;
+      flex: 1 !important;
+      min-width: 0 !important;
+      font-size: 13px !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
     }
     .post .who {
-      grid-column: 1 !important;
-      grid-row: 3 !important;
-      text-align: left !important;
-      font-size: 12px !important;
+      grid-column: unset !important;
+      grid-row: unset !important;
+      text-align: right !important;
+      flex-shrink: 0 !important;
+      font-size: 11.5px !important;
+      max-width: 60px !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
     }
     .post .c-prof {
-      grid-column: 2 !important;
-      grid-row: 3 !important;
-      justify-self: end !important;
+      grid-column: unset !important;
+      grid-row: unset !important;
+      justify-self: unset !important;
+      flex-shrink: 0 !important;
     }
     #catNav {
       display: block !important;
