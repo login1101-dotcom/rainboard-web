@@ -1156,12 +1156,8 @@
             <select class="field" id="cTag" style="flex:1;margin:0;"></select>
           </div>
           <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:130px;">
-            <span style="font-size:12px;color:var(--muted);white-space:nowrap;">サブ1:</span>
+            <span style="font-size:12px;color:var(--muted);white-space:nowrap;">サブ:</span>
             <select class="field" id="cTagSub1" style="flex:1;margin:0;"></select>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:130px;">
-            <span style="font-size:12px;color:var(--muted);white-space:nowrap;">サブ2:</span>
-            <select class="field" id="cTagSub2" style="flex:1;margin:0;"></select>
           </div>
         </div>
         <div class="crow">
@@ -2304,12 +2300,12 @@
     const nameEl=document.getElementById('cName'), profEl=document.getElementById('cProf'),
           titleEl=document.getElementById('cTitle'), bodyEl=document.getElementById('cBody'),
           tagEl=document.getElementById('cTag'), tagSub1El=document.getElementById('cTagSub1'),
-          tagSub2El=document.getElementById('cTagSub2'), emailEl=document.getElementById('cEmail'),
+          emailEl=document.getElementById('cEmail'),
           delEl=document.getElementById('cDelPw');
     const title=titleEl.value.trim(), body=bodyEl.value.trim();
     if(!title && !body){ titleEl.focus(); titleEl.style.borderColor='var(--amber)'; return; }
     titleEl.style.borderColor='';
-    const selectedTags = [tagEl.value, tagSub1El.value, tagSub2El.value].filter(Boolean);
+    const selectedTags = [tagEl.value, tagSub1El.value].filter(Boolean);
     const uniqueTags = [...new Set(selectedTags)];
     const tagValue = uniqueTags.join(',');
     const payload={ area:cur, tag:tagValue, title:title||body.slice(0,15),
@@ -2325,7 +2321,7 @@
       assignSeq(cur, postsOf(cur).map(x=>x.no).sort((a,b)=>a-b));
     }catch(e){ toast('通信エラーで投稿できませんでした。'); return; }
     titleEl.value=''; bodyEl.value=''; nameEl.value=''; profEl.value=''; emailEl.value=''; delEl.value='';
-    tagSub1El.value=''; tagSub2El.value='';
+    tagSub1El.value='';
     toggleCompose(false); renderPosts(); renderNav();
   }
 
@@ -2443,7 +2439,6 @@
   const optionsHtml = TAG_GROUPS.map(g=>`<optgroup label="${g.name}">${g.tags.map(k=>`<option value="${k}">${TAGS[k].name}</option>`).join('')}</optgroup>`).join('');
   document.getElementById('cTag').innerHTML = optionsHtml;
   document.getElementById('cTagSub1').innerHTML = '<option value="">(なし)</option>' + optionsHtml;
-  document.getElementById('cTagSub2').innerHTML = '<option value="">(なし)</option>' + optionsHtml;
   document.getElementById('main').classList.toggle('home-my', myAreas.length>0 && !showAllAreas);
   renderNav(); renderPicker(); fetchMyAreaPosts(); fetchGlobalPostCounts();
   if (window.innerWidth <= 820) {
