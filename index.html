@@ -1856,12 +1856,36 @@
     updateTagPanelPosition();
   }
   function myAreaNewPost() {
-    const target = myAreaPrefActive || myAreas[0];
-    if (!target) return;
-    openBoard(target);
+    if (myAreas.length === 0) return;
+    
+    // If we only have 1 My Area prefecture, open it directly!
+    if (myAreas.length === 1) {
+      openBoard(myAreas[0]);
+      setTimeout(() => toggleCompose(true), 100);
+      return;
+    }
+    
+    // If they have multiple, show a sleek modal to choose the target prefecture!
+    const listEl = document.getElementById('myAreaPostModalList');
+    listEl.innerHTML = myAreas.map(pref => `
+      <button onclick="selectMyAreaPostTarget('${pref}')" class="pchip" style="width:100%;justify-content:center;padding:10px;font-size:14px;font-weight:700;border:1px solid var(--indigo);background:var(--indigo-soft);color:var(--indigo-ink);border-radius:8px;cursor:pointer">
+        ${pref}
+      </button>
+    `).join('');
+    
+    document.getElementById('myAreaPostModal').classList.remove('hidden');
+  }
+
+  function selectMyAreaPostTarget(pref) {
+    closeMyAreaPostModal();
+    openBoard(pref);
     setTimeout(() => {
       toggleCompose(true);
     }, 50);
+  }
+
+  function closeMyAreaPostModal() {
+    document.getElementById('myAreaPostModal').classList.add('hidden');
   }
   function toggleMyAreaPrefFilter(pref) {
     showAllAreas = false;
@@ -2421,5 +2445,15 @@
   // 起動時は必ず地域選択画面を表示する（自動で掲示板は開かない）
 
 </script>
+
+<div id="myAreaPostModal" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border-radius:12px;padding:20px;max-width:320px;width:90%;box-shadow:var(--shadow-lg);text-align:center">
+    <h3 style="margin:0 0 16px;font-size:15px;font-weight:800;color:var(--indigo-ink)">投稿する地域を選択</h3>
+    <div id="myAreaPostModalList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+    </div>
+    <button onclick="closeMyAreaPostModal()" style="border:1px solid var(--border);background:var(--surface-2);color:var(--muted);width:100%;padding:8px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">キャンセル</button>
+  </div>
+</div>
+
 </body>
 </html>
