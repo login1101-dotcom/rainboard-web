@@ -420,6 +420,10 @@
   .field{width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--ink);
     border-radius:9px;padding:10px 12px;font-size:14px;outline:none;font-family:inherit}
   .field:focus{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+  #cEmail::placeholder{font-size:11.5px!important}
+  #cEmail::-webkit-input-placeholder{font-size:11.5px!important}
+  #cEmail::-moz-placeholder{font-size:11.5px!important}
+  #cEmail:-ms-input-placeholder{font-size:11.5px!important}
   textarea.field{min-height:82px;resize:vertical;line-height:1.6}
   .compose .foot{display:flex;align-items:center;gap:12px;margin-top:11px}
   .compose .foot .hint{font-size:11.5px;color:var(--faint)}
@@ -1147,8 +1151,8 @@
 
       <div class="compose hidden" id="composeBox">
         <div class="crow">
-          <input class="field" id="cName" placeholder="お名前（任意）" maxlength="20" style="flex:1;min-width:120px">
-          <input class="field" id="cProf" placeholder="プロフ（身長体重年齢・例：170-56-28）" maxlength="16" style="flex:1;min-width:120px">
+          <input class="field" id="cName" placeholder="お名前" maxlength="20" style="flex:1;min-width:120px">
+          <input class="field" id="cProf" placeholder="プロフ" maxlength="16" style="flex:1;min-width:120px">
         </div>
         <div class="crow" style="flex-wrap:wrap;gap:6px 10px;margin-bottom:8px;">
           <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:130px;">
@@ -1161,10 +1165,10 @@
           </div>
         </div>
         <div class="crow">
-          <input class="field" id="cTitle" placeholder="タイトル（15文字以内）" maxlength="15" style="flex:1;min-width:150px">
+          <input class="field" id="cTitle" placeholder="タイトル（12文字以内）" maxlength="12" style="flex:1;min-width:150px">
         </div>
-        <input class="field" id="cEmail" type="email" maxlength="80" placeholder="連絡先メール（全体には非公開、相手には公開されます）" style="margin-bottom:10px">
-        <textarea class="field" id="cBody" placeholder="詳しい内容があれば…（任意）" maxlength="500"></textarea>
+        <input class="field" id="cEmail" type="email" maxlength="80" placeholder="メール（全体には非公開、相手には表示されます）" style="margin-bottom:10px">
+        <textarea class="field" id="cBody" placeholder="募集内容詳細" maxlength="500"></textarea>
         <input class="field" id="cDelPw" maxlength="40" placeholder="削除用パスワード（任意・あとで自分の投稿を消すときに使います）" style="margin-top:10px">
         <div class="foot" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px">
           <span class="hint">電話番号など個人情報は書き込まないでください</span>
