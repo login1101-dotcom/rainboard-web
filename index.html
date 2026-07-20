@@ -1181,9 +1181,12 @@
         <input class="field" id="cEmail" type="email" maxlength="80" placeholder="連絡先メール（全体には非公開、相手には公開されます）" style="margin-bottom:10px">
         <textarea class="field" id="cBody" placeholder="詳しい内容があれば…（任意）" maxlength="500"></textarea>
         <input class="field" id="cDelPw" maxlength="40" placeholder="削除用パスワード（任意・あとで自分の投稿を消すときに使います）" style="margin-top:10px">
-        <div class="foot">
+        <div class="foot" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px">
           <span class="hint">電話番号など個人情報は書き込まないでください</span>
-          <button class="post-btn" onclick="submitPost()">投稿する</button>
+          <div style="display:flex;gap:8px;margin-left:auto;flex-shrink:0">
+            <button class="cancel-myarea-btn" onclick="toggleCompose(false)" style="margin:0;padding:8px 14px;font-size:13px;border-radius:8px">キャンセル</button>
+            <button class="post-btn" onclick="submitPost()">投稿する</button>
+          </div>
         </div>
       </div>
 
@@ -1373,14 +1376,34 @@
   }
   window.addEventListener('resize', syncMyAreaWidth);
 
-  // 掲示板のパンくずカードの幅を、下の投稿一覧カードと同じにする
+  // 掲示板のパンくずカード、投稿箱、注意事項の幅を、下の投稿一覧カードと同じにする
   function syncBoardWidth(){
     const card=document.getElementById('crumbCard');
     const wrap=document.querySelector('#boardView .tablewrap');
     if(!card||!wrap||!wrap.offsetWidth) return;
+    const w = wrap.offsetWidth + 'px';
+    
     card.style.boxSizing='border-box';
     card.style.maxWidth='100%';
-    card.style.width=wrap.offsetWidth+'px';
+    card.style.width=w;
+    
+    const ba = document.getElementById('boardActions');
+    if (ba) {
+      ba.style.boxSizing='border-box';
+      ba.style.maxWidth='100%';
+      ba.style.width=w;
+      ba.style.marginLeft='auto';
+      ba.style.marginRight='auto';
+    }
+    
+    const compose = document.getElementById('composeBox');
+    if (compose) {
+      compose.style.boxSizing='border-box';
+      compose.style.maxWidth='100%';
+      compose.style.width=w;
+      compose.style.marginLeft='auto';
+      compose.style.marginRight='auto';
+    }
   }
   window.addEventListener('resize', syncBoardWidth);
 
@@ -2326,6 +2349,14 @@
     const cb=document.getElementById('cautionBox'); if(cb) cb.classList.toggle('open', open);
     const ba=document.getElementById('boardActions'); if(ba) ba.style.display = open ? '' : 'none';
     if(open) document.getElementById('cTitle').focus();
+    
+    // Hide breadcrumb card on mobile when composer is open
+    if (window.innerWidth <= 820) {
+      const crumb = document.getElementById('crumbCard');
+      if (crumb) {
+        crumb.style.setProperty('display', open ? 'none' : '', 'important');
+      }
+    }
   }
 
   async function onSearch(q){
