@@ -895,6 +895,61 @@
       var(--pref-stage-5-bg) 100%
     );
   }
+
+  /* My Area Panel Layout */
+  .myarea-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--surface);
+  }
+  .myarea-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+  .myarea-label {
+    font-weight: 800;
+    font-size: 13.5px;
+    color: var(--indigo-ink);
+    flex-shrink: 0;
+  }
+  .myarea-subs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+  .myarea-right {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+  .myarea-right button {
+    margin: 0;
+  }
+  @media (max-width: 820px) {
+    .myarea-container {
+      flex-direction: column !important;
+      align-items: stretch !important;
+      gap: 8px !important;
+      padding: 8px 10px !important;
+    }
+    .myarea-left {
+      flex-wrap: wrap !important;
+    }
+    .myarea-right {
+      justify-content: flex-end !important;
+      margin-left: auto !important;
+    }
+  }
 </style>
 
 <div class="gate" id="gate">
@@ -1673,14 +1728,16 @@
         } else {
         myAreaHtml = `
           <div class="areatable" style="border-radius:10px;box-shadow:var(--shadow);overflow:hidden;margin-left:auto;margin-right:auto">
-            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:8px 10px;background:var(--surface)">
-              <span style="font-weight:800;font-size:13.5px;color:var(--indigo-ink);flex-shrink:0">マイエリア</span>
-              <div class="subs" style="display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;flex:1;min-width:0">
-                ${myAreaPrefsHtml}
+            <div class="myarea-container">
+              <div class="myarea-left">
+                <span class="myarea-label">マイエリア</span>
+                <div class="myarea-subs">
+                  ${myAreaPrefsHtml}
+                </div>
               </div>
-              <div style="display:flex;gap:6px;margin-left:auto">
-                <button class="set-myarea-btn" style="margin:0" onclick="toggleMyAreaMode()"><span class="pc-text">マイエリアを設定</span><span class="sp-text">マイエリア設定</span></button>
-                <button class="cancel-myarea-btn" style="margin:0" onclick="clearMyAreas()"><span class="pc-text">設定解除</span><span class="sp-text">解除</span></button>
+              <div class="myarea-right">
+                <button class="set-myarea-btn" onclick="toggleMyAreaMode()"><span class="pc-text">マイエリアを設定</span><span class="sp-text">マイエリア設定</span></button>
+                <button class="cancel-myarea-btn" onclick="clearMyAreas()"><span class="pc-text">設定解除</span><span class="sp-text">解除</span></button>
               </div>
             </div>
           </div>
