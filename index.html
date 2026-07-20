@@ -1500,7 +1500,7 @@
     '沖縄':'ON','talk':'TA'
   };
   let seqMap = {};
-  function assignSeq(area, idsAsc){ const c=AREA_CODE[area]||'XX'; idsAsc.forEach((id,i)=>{ seqMap[id]=c+String(i+1).padStart(4,'0'); }); }
+  function assignSeq(area, idsAsc){ const c=AREA_CODE[area]||'XX'; idsAsc.forEach((id,i)=>{ seqMap[id]=c+String(i+1).padStart(3,'0'); }); }
   function postLabel(p){ return seqMap[p.no] || ('#'+idOf(p.t)); }
   function fmtShort(t){ const d=new Date(t), z=n=>String(n).padStart(2,'0');
     return (d.getFullYear()%100)+'/'+(d.getMonth()+1)+'/'+d.getDate()+'_'+z(d.getHours())+':'+z(d.getMinutes()); }
@@ -2134,6 +2134,7 @@
       const rows=await r.json();
       if(!r.ok || !rows[0]){ toast('投稿に失敗しました。もう一度お試しください。'); return; }
       postsOf(cur).unshift(rowToPost(rows[0]));
+      assignSeq(cur, postsOf(cur).map(x=>x.no).sort((a,b)=>a-b));
     }catch(e){ toast('通信エラーで投稿できませんでした。'); return; }
     titleEl.value=''; bodyEl.value=''; nameEl.value=''; profEl.value=''; emailEl.value=''; delEl.value='';
     tagSub1El.value=''; tagSub2El.value='';
