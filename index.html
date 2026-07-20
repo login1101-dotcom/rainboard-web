@@ -1775,7 +1775,11 @@
                     ${myAreaPrefsHtml}
                   </div>
                 </div>
-                <div class="myarea-right">
+                <div class="myarea-right" style="display:flex;align-items:center;gap:6px">
+                  <button class="newbtn" onclick="myAreaNewPost()" style="padding:4px 10px;font-size:11.5px;font-weight:800;border-radius:6px;box-shadow:none;margin:0;display:inline-flex;align-items:center;gap:4px">
+                    <svg style="vertical-align:middle;margin-top:-1px" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                    新規投稿
+                  </button>
                   <button class="set-myarea-btn" onclick="toggleAllAreasView()">全国エリアを表示</button>
                 </div>
               </div>
@@ -1850,6 +1854,14 @@
     const panel = document.getElementById('prefPanel'); if (panel) { panel.classList.add('hidden'); panel.innerHTML = ''; }
     syncMyAreaWidth();
     updateTagPanelPosition();
+  }
+  function myAreaNewPost() {
+    const target = myAreaPrefActive || myAreas[0];
+    if (!target) return;
+    openBoard(target);
+    setTimeout(() => {
+      toggleCompose(true);
+    }, 50);
   }
   function toggleMyAreaPrefFilter(pref) {
     showAllAreas = false;
