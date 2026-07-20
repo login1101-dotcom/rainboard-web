@@ -1327,6 +1327,7 @@
     } catch(e) {}
     isSettingMyArea = false;
     showAllAreas = (myAreas.length === 0);
+    goState({v:'home', all:showAllAreas, region:null});
     renderPicker();
     renderNav();
     fetchMyAreaPosts();
@@ -1335,6 +1336,7 @@
   function toggleAllAreasView() {
     showAllAreas = !showAllAreas;
     isSettingMyArea = false;
+    goState({v:'home', all:showAllAreas, region:null});
     renderPicker();
     fetchMyAreaPosts();
   }
@@ -1348,6 +1350,7 @@
       } catch(e) {}
       isSettingMyArea = false;
       showAllAreas = true;
+      goState({v:'home', all:true, region:null});
       renderPicker();
       renderNav();
       fetchMyAreaPosts();
