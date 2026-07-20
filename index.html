@@ -384,18 +384,14 @@
   .board-actions .caution{margin-bottom:0;flex:1;padding-top:6px;padding-bottom:6px}
   @media(max-width:640px){.board-actions{gap:10px}
     .board-actions .newbtn{padding:10px 14px;font-size:13px}}
-  .caution{display:flex;gap:9px;align-items:center;background:var(--amber-soft);
+  .caution{background:var(--amber-soft);
     border:1px solid color-mix(in srgb,var(--amber) 40%,transparent);border-radius:10px;
-    padding:10px 13px;margin-bottom:16px;font-size:12.5px;color:var(--ink);line-height:1.6}
-  .caution .ic{flex:none;font-size:15px}
+    padding:8px 12px;margin-bottom:16px;font-size:12.5px;color:var(--ink);line-height:1.6}
   .caution b{color:var(--amber);font-weight:800}
-  .caution .caution-body{flex:1;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
-  .caution .caution-body b{display:none;flex:none;white-space:nowrap}
-  .caution.open .caution-body b{display:block}
-  .caution .caution-collapsed{font-weight:700}
+  .caution .caution-collapsed{display:inline;font-weight:700}
   .caution.open .caution-collapsed{display:none}
-  .caution .caution-list{display:none;font-size:12px;line-height:1.5}
-  .caution.open .caution-list{display:inline}
+  .caution .caution-expanded{display:none;font-size:12px;line-height:1.5}
+  .caution.open .caution-expanded{display:inline}
 
   /* Board view */
   .board-head{display:flex;align-items:center;gap:13px;margin-bottom:18px}
@@ -1144,12 +1140,8 @@
       </div>
       <div class="board-actions" id="boardActions" style="display:none">
         <div class="caution" id="cautionBox">
-          <span class="ic">⚠️</span>
-          <div class="caution-body">
-            <span class="caution-collapsed">投稿時の禁止事項について</span>
-            <b>禁止事項</b>
-            <span class="caution-list">：金銭のやり取り、違法薬物の譲渡・売買、電話番号・住所などの個人情報の書き込み。その他、法に触れる行為やマナー違反はすべて通報のうえ削除します。</span>
-          </div>
+          <span class="caution-collapsed">⚠️ 投稿時の禁止事項について</span>
+          <span class="caution-expanded">⚠️ <b>禁止事項</b>：金銭のやり取り、違法薬物の譲渡・売買、電話番号・住所などの個人情報の書き込み。その他、法に触れる行為やマナー違反はすべて通報のうえ削除します。</span>
         </div>
       </div>
 
