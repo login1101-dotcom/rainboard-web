@@ -861,66 +861,52 @@
     border-color: var(--pref-stage-5-fg) !important;
   }
 
-  /* Heatmap Legend Bar */
-  .heatmap-legend {
+  /* Header Heatmap Legend Bar */
+  .header-heatmap {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin: 0 auto 12px;
-    width: 700px;
-    max-width: 100%;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    box-shadow: var(--shadow);
-  }
-  .hl-title {
-    font-size: 11.5px;
-    font-weight: 800;
-    color: var(--muted);
-    margin-right: 4px;
-  }
-  .hl-item {
+    gap: 4px;
     font-size: 11px;
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  .hl-item.stage-0 {
-    background: var(--surface-2);
     color: var(--muted);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 8px;
+    flex-shrink: 0;
+    margin-left: auto;
   }
-  .hl-item.stage-1 {
-    background: var(--pref-stage-1-bg);
-    color: var(--pref-stage-1-fg);
-    border-color: var(--pref-stage-1-fg);
+  .hh-label {
+    font-weight: 800;
+    color: var(--indigo-ink);
+    margin-right: 2px;
   }
-  .hl-item.stage-2 {
-    background: var(--pref-stage-2-bg);
-    color: var(--pref-stage-2-fg);
-    border-color: var(--pref-stage-2-fg);
+  @media(max-width: 500px) {
+    .hh-label {
+      display: none;
+    }
   }
-  .hl-item.stage-3 {
-    background: var(--pref-stage-3-bg);
-    color: var(--pref-stage-3-fg);
-    border-color: var(--pref-stage-3-fg);
+  .hh-text {
+    font-size: 10px;
+    font-weight: 800;
   }
-  .hl-item.stage-4 {
-    background: var(--pref-stage-4-bg);
-    color: var(--pref-stage-4-fg);
-    border-color: var(--pref-stage-4-fg);
+  .hh-bar {
+    display: flex;
+    gap: 2px;
+    align-items: center;
   }
-  .hl-item.stage-5 {
-    background: var(--pref-stage-5-bg);
-    color: var(--pref-stage-5-fg);
-    border-color: var(--pref-stage-5-fg);
+  .hh-block {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
   }
+  .hh-block.stage-0 { background: var(--surface-2); }
+  .hh-block.stage-1 { background: var(--pref-stage-1-bg); border-color: var(--pref-stage-1-fg); }
+  .hh-block.stage-2 { background: var(--pref-stage-2-bg); border-color: var(--pref-stage-2-fg); }
+  .hh-block.stage-3 { background: var(--pref-stage-3-bg); border-color: var(--pref-stage-3-fg); }
+  .hh-block.stage-4 { background: var(--pref-stage-4-bg); border-color: var(--pref-stage-4-fg); }
+  .hh-block.stage-5 { background: var(--pref-stage-5-bg); border-color: var(--pref-stage-5-fg); }
 </style>
 
 <div class="gate" id="gate">
@@ -975,6 +961,19 @@
     <div class="searchbox">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
       <input placeholder="キーワードで探す（Enter）" onkeydown="if(event.key==='Enter')onSearch(this.value)">
+    </div>
+    <div class="header-heatmap">
+      <span class="hh-label">投稿数:</span>
+      <span class="hh-text">少</span>
+      <div class="hh-bar">
+        <span class="hh-block stage-0"></span>
+        <span class="hh-block stage-1"></span>
+        <span class="hh-block stage-2"></span>
+        <span class="hh-block stage-3"></span>
+        <span class="hh-block stage-4"></span>
+        <span class="hh-block stage-5"></span>
+      </div>
+      <span class="hh-text">多</span>
     </div>
   </div>
 </header>
@@ -1769,20 +1768,6 @@
     }
     
     document.getElementById('myAreaPanel').innerHTML = myAreaHtml;
-    if (pickGridHtml) {
-      const legendHtml = `
-        <div class="heatmap-legend">
-          <span class="hl-title">投稿数カラー:</span>
-          <span class="hl-item stage-0">0件</span>
-          <span class="hl-item stage-1">1件</span>
-          <span class="hl-item stage-2">2件</span>
-          <span class="hl-item stage-3">3件</span>
-          <span class="hl-item stage-4">4件</span>
-          <span class="hl-item stage-5">5件〜</span>
-        </div>
-      `;
-      pickGridHtml = legendHtml + pickGridHtml;
-    }
     document.getElementById('pickGrid').innerHTML = pickGridHtml;
     const panel = document.getElementById('prefPanel'); if (panel) { panel.classList.add('hidden'); panel.innerHTML = ''; }
     syncMyAreaWidth();
