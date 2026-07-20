@@ -47,12 +47,11 @@
     --maxw:1280px;
     --font: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,system-ui,sans-serif;
 
-    --pref-stage-1-bg: #EAECEF; --pref-stage-1-fg: #586069;
-    --pref-stage-2-bg: #E8F0FE; --pref-stage-2-fg: #1A73E8;
-    --pref-stage-3-bg: #E6F4EA; --pref-stage-3-fg: #137333;
-    --pref-stage-4-bg: #FEF7E0; --pref-stage-4-fg: #B06000;
-    --pref-stage-5-bg: #FDE8F3; --pref-stage-5-fg: #C2185B;
-    --pref-stage-6-bg: #FCE8E6; --pref-stage-6-fg: #C5221F;
+    --pref-stage-1-bg: #E8F0FE; --pref-stage-1-fg: #1A73E8;
+    --pref-stage-2-bg: #E6F4EA; --pref-stage-2-fg: #137333;
+    --pref-stage-3-bg: #FEF7E0; --pref-stage-3-fg: #B06000;
+    --pref-stage-4-bg: #FDE8F3; --pref-stage-4-fg: #C2185B;
+    --pref-stage-5-bg: #FCE8E6; --pref-stage-5-fg: #C5221F;
   }
   :root[data-theme="light"]{
     --bg:#F7F8FB; --surface:#FFFFFF; --surface-2:#FBFBFD;
@@ -62,12 +61,11 @@
     --amber:#E08A2B; --amber-soft:#FCEFDD; --good:#2E8B6B;
     --shadow:0 1px 2px rgba(27,32,51,.04), 0 6px 20px rgba(27,32,51,.05);
 
-    --pref-stage-1-bg: #EAECEF; --pref-stage-1-fg: #586069;
-    --pref-stage-2-bg: #E8F0FE; --pref-stage-2-fg: #1A73E8;
-    --pref-stage-3-bg: #E6F4EA; --pref-stage-3-fg: #137333;
-    --pref-stage-4-bg: #FEF7E0; --pref-stage-4-fg: #B06000;
-    --pref-stage-5-bg: #FDE8F3; --pref-stage-5-fg: #C2185B;
-    --pref-stage-6-bg: #FCE8E6; --pref-stage-6-fg: #C5221F;
+    --pref-stage-1-bg: #E8F0FE; --pref-stage-1-fg: #1A73E8;
+    --pref-stage-2-bg: #E6F4EA; --pref-stage-2-fg: #137333;
+    --pref-stage-3-bg: #FEF7E0; --pref-stage-3-fg: #B06000;
+    --pref-stage-4-bg: #FDE8F3; --pref-stage-4-fg: #C2185B;
+    --pref-stage-5-bg: #FCE8E6; --pref-stage-5-fg: #C5221F;
   }
 
   *{box-sizing:border-box}
@@ -862,12 +860,6 @@
     color: var(--pref-stage-5-fg) !important;
     border-color: var(--pref-stage-5-fg) !important;
   }
-  .areatable .subs a.pref-stage-6, .pchip.pref-stage-6 {
-    background: var(--pref-stage-6-bg) !important;
-    color: var(--pref-stage-6-fg) !important;
-    border-color: var(--pref-stage-6-fg) !important;
-  }
-
   /* Header Heatmap Legend Bar */
   .header-heatmap {
     display: flex;
@@ -879,7 +871,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 140px;
+    width: 100px;
     height: 24px;
     border-radius: 6px;
     border: 1px solid var(--border);
@@ -890,19 +882,17 @@
     box-shadow: 0 1px 2px rgba(27,32,51,.03);
     background: linear-gradient(to right,
       var(--surface-2) 0%,
-      var(--surface-2) 14.28%,
-      var(--pref-stage-1-bg) 14.28%,
-      var(--pref-stage-1-bg) 28.57%,
-      var(--pref-stage-2-bg) 28.57%,
-      var(--pref-stage-2-bg) 42.85%,
-      var(--pref-stage-3-bg) 42.85%,
-      var(--pref-stage-3-bg) 57.14%,
-      var(--pref-stage-4-bg) 57.14%,
-      var(--pref-stage-4-bg) 71.42%,
-      var(--pref-stage-5-bg) 71.42%,
-      var(--pref-stage-5-bg) 85.71%,
-      var(--pref-stage-6-bg) 85.71%,
-      var(--pref-stage-6-bg) 100%
+      var(--surface-2) 16.66%,
+      var(--pref-stage-1-bg) 16.66%,
+      var(--pref-stage-1-bg) 33.33%,
+      var(--pref-stage-2-bg) 33.33%,
+      var(--pref-stage-2-bg) 50%,
+      var(--pref-stage-3-bg) 50%,
+      var(--pref-stage-3-bg) 66.66%,
+      var(--pref-stage-4-bg) 66.66%,
+      var(--pref-stage-4-bg) 83.33%,
+      var(--pref-stage-5-bg) 83.33%,
+      var(--pref-stage-5-bg) 100%
     );
   }
 </style>
@@ -1527,8 +1517,7 @@
     if (count === 2) return 'pref-stage-2';
     if (count === 3) return 'pref-stage-3';
     if (count === 4) return 'pref-stage-4';
-    if (count === 5) return 'pref-stage-5';
-    return 'pref-stage-6';
+    return 'pref-stage-5';
   }
 
   const COLORS=['#3A4CA8','#2E8B6B','#C9761F','#8A4F9E','#B0475E','#2F7EA8'];
