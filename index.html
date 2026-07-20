@@ -46,6 +46,12 @@
     --shadow:0 1px 2px rgba(27,32,51,.04), 0 6px 20px rgba(27,32,51,.05);
     --maxw:1280px;
     --font: "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",Meiryo,system-ui,sans-serif;
+
+    --pref-stage-1-bg: #E8F0FE; --pref-stage-1-fg: #1A73E8;
+    --pref-stage-2-bg: #E6F4EA; --pref-stage-2-fg: #137333;
+    --pref-stage-3-bg: #FEF7E0; --pref-stage-3-fg: #B06000;
+    --pref-stage-4-bg: #FDE8F3; --pref-stage-4-fg: #C2185B;
+    --pref-stage-5-bg: #FCE8E6; --pref-stage-5-fg: #C5221F;
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -57,6 +63,12 @@
       --good:#57B892;
       --map-off:#3A4256; --map-on:#6E8BE8;
       --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+
+      --pref-stage-1-bg: #1A2844; --pref-stage-1-fg: #6EA5FF;
+      --pref-stage-2-bg: #162C21; --pref-stage-2-fg: #57B880;
+      --pref-stage-3-bg: #352618; --pref-stage-3-fg: #EAA14F;
+      --pref-stage-4-bg: #351C2C; --pref-stage-4-fg: #EA74A1;
+      --pref-stage-5-bg: #341F21; --pref-stage-5-fg: #F2787B;
     }
   }
   :root[data-theme="dark"]{
@@ -67,6 +79,12 @@
     --amber:#E4A055; --amber-soft:#3A2E1C; --good:#57B892;
     --map-off:#3A4256; --map-on:#6E8BE8;
     --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+
+    --pref-stage-1-bg: #1A2844; --pref-stage-1-fg: #6EA5FF;
+    --pref-stage-2-bg: #162C21; --pref-stage-2-fg: #57B880;
+    --pref-stage-3-bg: #352618; --pref-stage-3-fg: #EAA14F;
+    --pref-stage-4-bg: #351C2C; --pref-stage-4-fg: #EA74A1;
+    --pref-stage-5-bg: #341F21; --pref-stage-5-fg: #F2787B;
   }
   :root[data-theme="light"]{
     --bg:#F7F8FB; --surface:#FFFFFF; --surface-2:#FBFBFD;
@@ -75,6 +93,12 @@
     --indigo:#3A4CA8; --indigo-soft:#EBEEF9; --indigo-ink:#2A3A88;
     --amber:#E08A2B; --amber-soft:#FCEFDD; --good:#2E8B6B;
     --shadow:0 1px 2px rgba(27,32,51,.04), 0 6px 20px rgba(27,32,51,.05);
+
+    --pref-stage-1-bg: #E8F0FE; --pref-stage-1-fg: #1A73E8;
+    --pref-stage-2-bg: #E6F4EA; --pref-stage-2-fg: #137333;
+    --pref-stage-3-bg: #FEF7E0; --pref-stage-3-fg: #B06000;
+    --pref-stage-4-bg: #FDE8F3; --pref-stage-4-fg: #C2185B;
+    --pref-stage-5-bg: #FCE8E6; --pref-stage-5-fg: #C5221F;
   }
 
   *{box-sizing:border-box}
@@ -812,6 +836,33 @@
       border-radius: 8px !important;
     }
   }
+
+  /* Pref color stages based on post counts */
+  .areatable .subs a.pref-stage-1, .pchip.pref-stage-1 {
+    background: var(--pref-stage-1-bg) !important;
+    color: var(--pref-stage-1-fg) !important;
+    border-color: var(--pref-stage-1-fg) !important;
+  }
+  .areatable .subs a.pref-stage-2, .pchip.pref-stage-2 {
+    background: var(--pref-stage-2-bg) !important;
+    color: var(--pref-stage-2-fg) !important;
+    border-color: var(--pref-stage-2-fg) !important;
+  }
+  .areatable .subs a.pref-stage-3, .pchip.pref-stage-3 {
+    background: var(--pref-stage-3-bg) !important;
+    color: var(--pref-stage-3-fg) !important;
+    border-color: var(--pref-stage-3-fg) !important;
+  }
+  .areatable .subs a.pref-stage-4, .pchip.pref-stage-4 {
+    background: var(--pref-stage-4-bg) !important;
+    color: var(--pref-stage-4-fg) !important;
+    border-color: var(--pref-stage-4-fg) !important;
+  }
+  .areatable .subs a.pref-stage-5, .pchip.pref-stage-5 {
+    background: var(--pref-stage-5-bg) !important;
+    color: var(--pref-stage-5-fg) !important;
+    border-color: var(--pref-stage-5-fg) !important;
+  }
 </style>
 
 <div class="gate" id="gate">
@@ -1389,6 +1440,48 @@
     }catch(e){ store[area]=store[area]||[]; }
     loading=false; if(cur===area){ renderPosts(); renderNav(); }
   }
+  async function fetchGlobalPostCounts() {
+    try {
+      const u = SUPA_URL + '/rest/v1/posts?select=area';
+      const r = await fetch(u, { headers: SUPA_HEAD });
+      const rows = await r.json();
+      if (Array.isArray(rows)) {
+        for (const area in store) {
+          if (area !== cur) {
+            const isReal = store[area] && store[area].length > 0 && store[area][0].no !== undefined;
+            if (!isReal) {
+              store[area] = [];
+            }
+          }
+        }
+        rows.forEach(x => {
+          if (x.area === cur) return;
+          store[x.area] = store[x.area] || [];
+          const isReal = store[x.area].length > 0 && store[x.area][0].no !== undefined;
+          if (!isReal) {
+            if (!store[x.area]._isDummyInit) {
+              store[x.area] = [];
+              store[x.area]._isDummyInit = true;
+            }
+            store[x.area].push({});
+          }
+        });
+      }
+      renderPicker();
+      renderNav();
+    } catch(e) {
+      console.error(e);
+    }
+  }
+  function prefClass(pref) {
+    const count = postsOf(pref).length;
+    if (count === 0) return '';
+    if (count === 1) return 'pref-stage-1';
+    if (count === 2) return 'pref-stage-2';
+    if (count === 3) return 'pref-stage-3';
+    if (count === 4) return 'pref-stage-4';
+    return 'pref-stage-5';
+  }
 
   const COLORS=['#3A4CA8','#2E8B6B','#C9761F','#8A4F9E','#B0475E','#2F7EA8'];
   function colorFor(s){ let h=0; for(const c of (s||'？')) h=(h*31+c.charCodeAt(0))>>>0; return COLORS[h%COLORS.length]; }
@@ -1495,7 +1588,7 @@
       const rows = AREAS.map(a => {
         const prefsHtml = a.prefs.map(s => {
           const isSelected = tempSelectedMyAreas.includes(s);
-          const chipClass = isSelected ? 'class="selected-chip"' : '';
+          const chipClass = isSelected ? 'class="selected-chip"' : (prefClass(s) ? `class="${prefClass(s)}"` : '');
           return `<a ${chipClass} onclick="selectMyAreaPref('${s}')">${s}</a>`;
         }).join('');
         return `<tr>
@@ -1532,7 +1625,7 @@
           myAreaPrefsHtml += `<a class="${allActive}" onclick="clearMyAreaPrefFilter()">すべて</a>`;
         }
         myAreaPrefsHtml += myAreas.map(s => {
-          const activeClass = myAreaPrefActive === s ? 'active' : '';
+          const activeClass = (myAreaPrefActive === s ? 'active ' : '') + prefClass(s);
           return `<a class="${activeClass}" onclick="toggleMyAreaPrefFilter('${s}')">${s}</a>`;
         }).join('');
         
@@ -1563,7 +1656,7 @@
           const rows = AREAS.filter(a => !regionFilter || a.id === regionFilter).map(a => `
             <tr>
               <td class="an">${a.name}</td>
-              <td class="subs">${a.prefs.map(s => `<a onclick="openBoard('${s}')">${s}</a>`).join('')}</td>
+              <td class="subs">${a.prefs.map(s => `<a class="${prefClass(s)}" onclick="openBoard('${s}')">${s}</a>`).join('')}</td>
             </tr>
           `).join('');
           pickGridHtml = `
@@ -1593,7 +1686,7 @@
         const rows = AREAS.filter(a => !regionFilter || a.id === regionFilter).map(a => `
           <tr>
             <td class="an">${a.name}</td>
-            <td class="subs">${a.prefs.map(s => `<a onclick="openBoard('${s}')">${s}</a>`).join('')}</td>
+            <td class="subs">${a.prefs.map(s => `<a class="${prefClass(s)}" onclick="openBoard('${s}')">${s}</a>`).join('')}</td>
           </tr>
         `).join('');
         
@@ -1646,7 +1739,7 @@
     if(already){ panel.classList.add('hidden'); panel.innerHTML=''; return; }
     const a=AREAS.find(x=>x.id===id);
     panel.innerHTML = `<h4>${a.name}｜エリアを選んでください</h4>
-      <div class="prefs">${a.prefs.map(p=>`<span class="pchip" onclick="openBoard('${p}')">${p}<b class="tnum">${postsOf(p).length}</b></span>`).join('')}</div>`;
+      <div class="prefs">${a.prefs.map(p=>`<span class="pchip ${prefClass(p)}" onclick="openBoard('${p}')">${p}<b class="tnum">${postsOf(p).length}</b></span>`).join('')}</div>`;
     panel.classList.remove('hidden');
   }
 
@@ -1836,6 +1929,7 @@
     document.querySelectorAll('.navlist a').forEach(a=>a.classList.remove('active'));
     renderPicker(); renderNav();
     fetchMyAreaPosts();
+    fetchGlobalPostCounts(); // 非同期で最新件数を取得して色を更新
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
@@ -2104,7 +2198,7 @@
   document.getElementById('cTagSub1').innerHTML = '<option value="">(なし)</option>' + optionsHtml;
   document.getElementById('cTagSub2').innerHTML = '<option value="">(なし)</option>' + optionsHtml;
   document.getElementById('main').classList.toggle('home-my', myAreas.length>0 && !showAllAreas);
-  renderNav(); renderPicker(); fetchMyAreaPosts();
+  renderNav(); renderPicker(); fetchMyAreaPosts(); fetchGlobalPostCounts();
   // 更新（再読み込み）したとき、直前に見ていた画面を復元する
   try{
     const sv=JSON.parse(sessionStorage.getItem('rb_view')||'null');
