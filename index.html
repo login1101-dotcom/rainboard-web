@@ -1334,7 +1334,9 @@
 
   function toggleAllAreasView() {
     showAllAreas = !showAllAreas;
+    isSettingMyArea = false;
     renderPicker();
+    fetchMyAreaPosts();
   }
 
   function clearMyAreas() {
@@ -1759,10 +1761,6 @@
         }).join('');
         
         // マイエリアカード（見出し・都道府県チップ・設定ボタンを1行に配置）
-        // 全国の地域選択リスト表示中はバーを出さない（リストだけの画面を保つ）
-        if (showAllAreas) {
-          myAreaHtml = '';
-        } else {
         myAreaHtml = `
           <div class="areatable" style="border-radius:10px;box-shadow:var(--shadow);overflow:hidden;margin-left:auto;margin-right:auto">
             <div class="myarea-container">
@@ -1772,13 +1770,13 @@
                 </div>
               </div>
               <div class="myarea-right">
-                <button class="set-myarea-btn" onclick="toggleMyAreaMode()">全国エリアを表示</button>
+                <button class="set-myarea-btn" onclick="toggleAllAreasView()">${showAllAreas ? 'マイエリアを表示' : '全国エリアを表示'}</button>
+                <button class="set-myarea-btn" style="background:var(--indigo-soft);color:var(--indigo-ink)" onclick="toggleMyAreaMode()"><span class="pc-text">設定変更</span><span class="sp-text">設定</span></button>
                 <button class="cancel-myarea-btn" onclick="clearMyAreas()"><span class="pc-text">設定解除</span><span class="sp-text">解除</span></button>
               </div>
             </div>
           </div>
         `;
-        }
 
         // マイエリア設定中は通常は全地域リストを出さない。
         // ロゴ・「地域を選び直す」から来たとき（showAllAreas=true）だけ全地域リストを表示する。
@@ -1849,6 +1847,8 @@
     updateTagPanelPosition();
   }
   function toggleMyAreaPrefFilter(pref) {
+    showAllAreas = false;
+    isSettingMyArea = false;
     if (myAreaPrefActive === pref) {
       myAreaPrefActive = null;
     } else {
@@ -1858,6 +1858,8 @@
     fetchMyAreaPosts();
   }
   function clearMyAreaPrefFilter() {
+    showAllAreas = false;
+    isSettingMyArea = false;
     myAreaPrefActive = null;
     renderPicker();
     fetchMyAreaPosts();
