@@ -778,6 +778,9 @@
     .posthead {
       display: none !important;
     }
+    .tablewrap {
+      width: 100% !important;
+    }
     .posts {
       min-width: 0 !important;
       border-radius: var(--radius) !important;
@@ -1602,10 +1605,10 @@
           <tbody>
             <tr>
               <th style="vertical-align:middle">
-                <div style="display:flex;align-items:center;justify-content:center;height:24px;padding:4px 6px;box-sizing:border-box">地域名</div>
+                <div style="display:flex;align-items:center;justify-content:center;padding:4px 6px;">地域名</div>
               </th>
               <th style="vertical-align:middle">
-                <div style="display:flex;align-items:center;justify-content:space-between;width:100%;height:24px;padding:4px 8px;box-sizing:border-box">
+                <div style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:4px 8px;">
                   <span style="flex-shrink:0">対象エリア</span>
                   <div style="display:flex;gap:6px">${btnHtml}</div>
                 </div>
@@ -1664,10 +1667,10 @@
               <tbody>
                 <tr>
                   <th style="vertical-align:middle">
-                    <div style="display:flex;align-items:center;justify-content:center;height:24px;padding:4px 6px;box-sizing:border-box">地域名</div>
+                    <div style="display:flex;align-items:center;justify-content:center;padding:4px 6px;">地域名</div>
                   </th>
                   <th style="vertical-align:middle">
-                    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;height:24px;padding:4px 8px;box-sizing:border-box">
+                    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:4px 8px;">
                       <span style="flex-shrink:0">対象エリア</span>
                       <div style="display:flex;gap:6px">${btnHtml}</div>
                     </div>
@@ -1695,10 +1698,10 @@
             <tbody>
               <tr>
                 <th style="vertical-align:middle">
-                  <div style="display:flex;align-items:center;justify-content:center;height:24px;padding:4px 6px;box-sizing:border-box">地域名</div>
+                  <div style="display:flex;align-items:center;justify-content:center;padding:4px 6px;">地域名</div>
                 </th>
                 <th style="vertical-align:middle">
-                  <div style="display:flex;align-items:center;justify-content:space-between;width:100%;height:24px;padding:4px 8px;box-sizing:border-box">
+                  <div style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:4px 8px;">
                     <span style="flex-shrink:0">対象エリア</span>
                     ${btnHtml}
                   </div>
@@ -1803,7 +1806,7 @@
     document.getElementById('main').classList.remove('home-my');
     renderNav();
     toggleCompose(false);
-    setTagPanel(CATS.some(c=>c.id===id));
+    setTagPanel(CATS.some(c=>c.id===id) || window.innerWidth <= 820);
     renderPosts(); fetchPosts(id);
     window.scrollTo({top:0,behavior:'smooth'});
   }
@@ -1944,7 +1947,7 @@
   let tagFilter=new Set();
   function toggleTagFilter(k,on){ if(on) tagFilter.add(k); else tagFilter.delete(k); renderPosts(); renderMyAreaPosts(); }
   function renderPosts(){
-    const src=postsOf(cur);
+    const src=postsOf(cur).filter(p => p.no !== undefined);
     const filtered = tagFilter.size ? src.filter(p=>(p.tag||'').split(',').some(t=>tagFilter.has(t))) : src;
     const box=document.getElementById('posts');
     const cntEl=document.getElementById('cnt'); if(cntEl) cntEl.textContent=filtered.length;
@@ -1963,7 +1966,7 @@
           <div class="c-area">${esc(p.area==='talk'?'おしゃべり':(p.area||''))}</div>
           <div class="no tnum">${postLabel(p)}</div>
           <div class="c-tag" style="display:flex;flex-wrap:wrap;gap:2px;justify-content:center;">${tagHtml}</div>
-          <div class="title">${esc(p.title||p.body.slice(0,30))}</div>
+          <div class="title">${esc(p.title||(p.body||'').slice(0,30))}</div>
           <div class="who">${esc(nm)}</div>
           <div class="c-prof">${prof}</div>
           <div class="when tnum">${fmtShort(p.t)}</div>
