@@ -1698,7 +1698,11 @@
         <button class="cancel-myarea-btn" onclick="cancelMyAreaMode()">キャンセル</button>
       `;
     } else {
-      btnHtml = `<button class="set-myarea-btn" onclick="toggleMyAreaMode()"><span class="pc-text">マイエリアを設定</span><span class="sp-text">マイエリア設定</span></button>`;
+      btnHtml = '';
+      if (myAreas.length > 0) {
+        btnHtml += `<button class="set-myarea-btn" style="background:var(--indigo-soft);color:var(--indigo-ink);margin-right:6px" onclick="toggleAllAreasView()">マイエリアに戻る</button>`;
+      }
+      btnHtml += `<button class="set-myarea-btn" onclick="toggleMyAreaMode()"><span class="pc-text">マイエリアを設定</span><span class="sp-text">マイエリア設定</span></button>`;
     }
 
     // 地域リストの下に付ける3行（おしゃべり・お知らせ・禁止事項）
@@ -1756,7 +1760,7 @@
         let myAreaPrefsHtml = '';
         if (myAreas.length > 1) {
           const allActive = !myAreaPrefActive ? 'active' : '';
-          myAreaPrefsHtml += `<a class="${allActive}" onclick="clearMyAreaPrefFilter()">すべて</a>`;
+          myAreaPrefsHtml += `<a class="${allActive}" onclick="clearMyAreaPrefFilter()">マイエリアすべて</a>`;
         }
         myAreaPrefsHtml += myAreas.map(s => {
           const activeClass = (myAreaPrefActive === s ? 'active ' : '') + prefClass(s);
@@ -1764,20 +1768,24 @@
         }).join('');
         
         // マイエリアカード（見出し・都道府県チップ・設定ボタンを1行に配置）
-        myAreaHtml = `
-          <div class="areatable" style="border-radius:10px;box-shadow:var(--shadow);overflow:hidden;margin-left:auto;margin-right:auto">
-            <div class="myarea-container">
-              <div class="myarea-left">
-                <div class="subs myarea-subs">
-                  ${myAreaPrefsHtml}
+        if (showAllAreas) {
+          myAreaHtml = '';
+        } else {
+          myAreaHtml = `
+            <div class="areatable" style="border-radius:10px;box-shadow:var(--shadow);overflow:hidden;margin-left:auto;margin-right:auto">
+              <div class="myarea-container">
+                <div class="myarea-left">
+                  <div class="subs myarea-subs">
+                    ${myAreaPrefsHtml}
+                  </div>
+                </div>
+                <div class="myarea-right">
+                  <button class="set-myarea-btn" onclick="toggleAllAreasView()">全国エリアを表示</button>
                 </div>
               </div>
-              <div class="myarea-right">
-                <button class="set-myarea-btn" onclick="toggleAllAreasView()">${showAllAreas ? 'マイエリアを表示' : '全国エリアを表示'}</button>
-              </div>
             </div>
-          </div>
-        `;
+          `;
+        }
 
         // マイエリア設定中は通常は全地域リストを出さない。
         // ロゴ・「地域を選び直す」から来たとき（showAllAreas=true）だけ全地域リストを表示する。
