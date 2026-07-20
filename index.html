@@ -1168,7 +1168,21 @@
           <input class="field" id="cTitle" placeholder="タイトル（12文字以内）" maxlength="12" style="flex:1;min-width:150px">
         </div>
         <input class="field" id="cEmail" type="email" maxlength="80" placeholder="メール（全体には非公開、相手には表示されます）" style="margin-bottom:2px">
-        <textarea class="field" id="cBody" placeholder="募集内容詳細" maxlength="500"></textarea>
+        <textarea class="field" id="cBody" placeholder="募集内容詳細" maxlength="500" style="margin-bottom:2px;"></textarea>
+        <div id="cPhotoArea" style="margin:2px 0;display:flex;flex-direction:column;gap:4px;">
+          <input type="file" id="cPhotoInput" accept="image/*" style="display:none" onchange="onPhotoSelected(event)">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button type="button" class="tbtn" onclick="document.getElementById('cPhotoInput').click()" style="margin:0;padding:6px 12px;display:flex;align-items:center;gap:4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>写真を追加</span>
+            </button>
+            <span id="cPhotoStatus" style="font-size:11px;color:var(--muted);"></span>
+          </div>
+          <div id="cPhotoPreviewBox" style="display:none;position:relative;width:80px;height:80px;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--surface-2);">
+            <img id="cPhotoPreview" src="" style="width:100%;height:100%;object-fit:cover;">
+            <button type="button" onclick="clearSelectedPhoto()" style="position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,0.6);color:#fff;border:0;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;">×</button>
+          </div>
+        </div>
         <input class="field" id="cDelPw" maxlength="40" placeholder="削除用パスワード（任意）" style="margin-top:2px">
         <div class="foot" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px">
           <span class="hint">電話番号など個人情報は書き込まないでください</span>
@@ -1238,6 +1252,13 @@
       <button class="tbtn" onclick="closeDel()">キャンセル</button>
       <button class="post-btn" style="background:linear-gradient(145deg,#d24b4b,#a82a2a)" onclick="confirmDelete()">削除する</button>
     </div>
+  </div>
+</div>
+<!-- Lightbox modal for zooming images -->
+<div id="imageLightbox" class="modal hidden" onclick="closeLightbox()" style="z-index: 10000; background: rgba(0,0,0,0.85);">
+  <div style="position: relative; max-width: 95%; max-height: 95%; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation()">
+    <img id="lightboxImg" src="" style="max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+    <button onclick="closeLightbox()" style="position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; background: #fff; color: #333; border: 0; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">×</button>
   </div>
 </div>
 <div id="toast" class="toast"></div>
@@ -1412,7 +1433,7 @@
 
     try {
       const fetchList = myAreaPrefActive ? [myAreaPrefActive] : myAreas;
-      const u = SUPA_URL + '/rest/v1/posts?area=in.(' + fetchList.map(encodeURIComponent).join(',') + ')&select=id,area,tag,title,name,prof,body,created_at&order=created_at.desc&limit=20';
+      const u = SUPA_URL + '/rest/v1/posts?area=in.(' + fetchList.map(encodeURIComponent).join(',') + ')&select=id,area,tag,title,name,prof,body,image_url,created_at&order=created_at.desc&limit=20';
       const r = await fetch(u, { headers: SUPA_HEAD });
       const rows = await r.json();
 
@@ -1573,12 +1594,12 @@
   let loading = false;
   function postsOf(id){ return store[id] || (store[id]=[]); }
   function totalPosts(){ let n=0; for(const k in store) n+=store[k].length; return n; }
-  function rowToPost(x){ return {no:x.id, area:x.area, tag:x.tag, title:x.title||'', name:x.name||'', prof:x.prof||'', body:x.body||'', t:Date.parse(x.created_at)}; }
+  function rowToPost(x){ return {no:x.id, area:x.area, tag:x.tag, title:x.title||'', name:x.name||'', prof:x.prof||'', body:x.body||'', image_url:x.image_url||null, t:Date.parse(x.created_at)}; }
   async function fetchPosts(area){
     loading=true; if(cur===area) renderPosts();
     try{
       const u=SUPA_URL+'/rest/v1/posts?area=eq.'+encodeURIComponent(area)
-        +'&select=id,area,tag,title,name,prof,body,created_at&order=created_at.desc&limit=300';
+        +'&select=id,area,tag,title,name,prof,body,image_url,created_at&order=created_at.desc&limit=300';
       const r=await fetch(u,{headers:SUPA_HEAD});
       const rows=await r.json();
       store[area]=Array.isArray(rows)?rows.map(rowToPost):[];
@@ -2186,6 +2207,7 @@
           <button class="post-btn" id="repBtn" onclick="submitReply()">返信する</button>
         </div>
       </div>` : '';
+    const imgHtml = p.image_url ? `<div class="dimg" style="margin-top:12px;text-align:center;"><img src="${p.image_url}" style="max-width:100%;max-height:300px;border-radius:8px;cursor:pointer;object-fit:contain;box-shadow:var(--shadow);" onclick="zoomImage('${p.image_url}')"></div>` : '';
     document.getElementById('detailBody').innerHTML = `<div class="detailcard">
       <div class="dhead">
         <div style="display:flex;flex-wrap:wrap;gap:4px;">${tagHtml}</div>
@@ -2195,6 +2217,7 @@
       <h3 class="dtitle">${esc(p.title||'（無題）')}</h3>
       <div class="dmeta"><span class="dwho">${esc(nm)}</span>${prof}</div>
       <div class="dbody">${esc(p.body||'（本文なし）')}</div>
+      ${imgHtml}
       <div class="drc">${actions}</div>
     </div>${replyHtml}`;
     document.getElementById('boardView').classList.add('hidden');
@@ -2274,6 +2297,76 @@
   function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),3200); }
   function talkSoon(){ toast('このコーナーはただいま準備中です。もうすぐ書き込めるようにします🌈'); }
 
+  // Photo uploading & rendering logic
+  let selectedPhotoData = null;
+  function onPhotoSelected(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const status = document.getElementById('cPhotoStatus');
+    status.textContent = '圧縮中...';
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const maxDim = 800;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) {
+            h = Math.round((h * maxDim) / w);
+            w = maxDim;
+          } else {
+            w = Math.round((w * maxDim) / h);
+            h = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        selectedPhotoData = compressedDataUrl;
+        document.getElementById('cPhotoPreview').src = compressedDataUrl;
+        document.getElementById('cPhotoPreviewBox').style.display = 'block';
+        status.textContent = '追加しました';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearSelectedPhoto() {
+    selectedPhotoData = null;
+    document.getElementById('cPhotoInput').value = '';
+    document.getElementById('cPhotoPreview').src = '';
+    document.getElementById('cPhotoPreviewBox').style.display = 'none';
+    document.getElementById('cPhotoStatus').textContent = '';
+  }
+
+  function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    let i = n;
+    while(i--) {
+      u8arr[i] = bstr.charCodeAt(i);
+    }
+    return new Blob([u8arr], {type:mime});
+  }
+
+  function zoomImage(url) {
+    const lb = document.getElementById('imageLightbox');
+    const img = document.getElementById('lightboxImg');
+    img.src = url;
+    lb.classList.remove('hidden');
+  }
+
+  function closeLightbox() {
+    const lb = document.getElementById('imageLightbox');
+    lb.classList.add('hidden');
+    document.getElementById('lightboxImg').src = '';
+  }
+
   let delTargetNo=null;
   function openDelForm(no){
     delTargetNo=no;
@@ -2309,23 +2402,57 @@
     const title=titleEl.value.trim(), body=bodyEl.value.trim();
     if(!title && !body){ titleEl.focus(); titleEl.style.borderColor='var(--amber)'; return; }
     titleEl.style.borderColor='';
+    
+    // Upload image if selected
+    let imageUrl = null;
+    if (selectedPhotoData) {
+      const btn = document.querySelector('.foot .post-btn');
+      const originalLabel = btn ? btn.textContent : '投稿する';
+      if (btn) { btn.disabled = true; btn.textContent = '画像送信中...'; }
+      try {
+        const blob = dataURLtoBlob(selectedPhotoData);
+        const ext = 'jpg';
+        const filename = `${Date.now()}_${Math.random().toString(36).slice(2, 7)}.${ext}`;
+        const uploadUrl = `${SUPA_URL}/storage/v1/object/post-images/${filename}`;
+        
+        const res = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPA_KEY,
+            'Authorization': 'Bearer ' + SUPA_KEY,
+            'Content-Type': 'image/jpeg'
+          },
+          body: blob
+        });
+        if (!res.ok) throw new Error('Upload failed');
+        imageUrl = `${SUPA_URL}/storage/v1/object/public/post-images/${filename}`;
+      } catch (e) {
+        if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+        toast('画像のアップロードに失敗しました。');
+        return;
+      }
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+    }
+
     const selectedTags = [tagEl.value, tagSub1El.value].filter(Boolean);
     const uniqueTags = [...new Set(selectedTags)];
     const tagValue = uniqueTags.join(',');
     const payload={ area:cur, tag:tagValue, title:title||body.slice(0,15),
       name:nameEl.value.trim(), prof:profEl.value.trim(),
       contact_email:(emailEl.value||'').trim()||null,
-      del_pw:(delEl.value||'').trim()||null, body };
-    try{
-      const r=await fetch(SUPA_URL+'/rest/v1/posts?select=id,area,tag,title,name,prof,body,created_at',
+      del_pw:(delEl.value||'').trim()||null, body, image_url:imageUrl };
+    try {
+      const r=await fetch(SUPA_URL+'/rest/v1/posts?select=id,area,tag,title,name,prof,body,image_url,created_at',
         {method:'POST',headers:Object.assign({'Content-Type':'application/json',Prefer:'return=representation'},SUPA_HEAD),body:JSON.stringify(payload)});
       const rows=await r.json();
       if(!r.ok || !rows[0]){ toast('投稿に失敗しました。もう一度お試しください。'); return; }
       postsOf(cur).unshift(rowToPost(rows[0]));
       assignSeq(cur, postsOf(cur).map(x=>x.no).sort((a,b)=>a-b));
-    }catch(e){ toast('通信エラーで投稿できませんでした。'); return; }
+    } catch(e) { toast('通信エラーで投稿できませんでした。'); return; }
+    
     titleEl.value=''; bodyEl.value=''; nameEl.value=''; profEl.value=''; emailEl.value=''; delEl.value='';
     tagSub1El.value='';
+    clearSelectedPhoto();
     toggleCompose(false); renderPosts(); renderNav();
   }
 
