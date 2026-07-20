@@ -209,7 +209,7 @@
     color: #ffffff !important;
   }
   #myAreaPanel:not(:empty) {
-    margin-bottom: 3px;
+    margin-bottom: 1px;
   }
   .prefpanel{margin-top:12px;background:var(--surface);border:1px solid var(--indigo);
     border-radius:12px;padding:14px 16px}
@@ -951,6 +951,9 @@
     .myarea-right {
       justify-content: flex-end !important;
     }
+    #tagPanel {
+      margin-top: 1px !important;
+    }
   }
   #tagPanel h2 {
     padding: 6px 14px !important;
@@ -1058,7 +1061,7 @@
       </div>
 
       <!-- マイエリア統合タイムライン（掲示板と同じ見た目） -->
-      <div id="myAreaTimeline" class="hidden" style="margin-top:3px;margin-bottom:10px">
+      <div id="myAreaTimeline" class="hidden" style="margin-top:1px;margin-bottom:10px">
         <div class="tablewrap" style="width:fit-content;max-width:100%;margin-left:auto;margin-right:auto">
           <div class="posthead">
             <div>地域</div>
@@ -1124,7 +1127,7 @@
 
     <!-- BOARD -->
     <div id="boardView" class="hidden">
-      <div class="areatable" id="crumbCard" style="border-radius:10px;box-shadow:var(--shadow);overflow:hidden;margin:0 auto 3px">
+      <div class="areatable" id="crumbCard" style="border-radius:10px;box-shadow:var(--shadow);overflow:hidden;margin:0 auto 1px">
         <div style="display:flex;align-items:center;gap:12px;padding:8px 10px;background:var(--surface)">
           <span id="bCrumb" style="font-weight:800;font-size:13.5px;color:var(--indigo-ink)"></span>
           <button class="newbtn" id="newBtn" onclick="toggleCompose()" style="margin:0 0 0 auto;padding:8px 14px;font-size:13px">
