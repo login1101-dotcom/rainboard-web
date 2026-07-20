@@ -1810,6 +1810,7 @@
     document.getElementById('pickGrid').innerHTML = pickGridHtml;
     const panel = document.getElementById('prefPanel'); if (panel) { panel.classList.add('hidden'); panel.innerHTML = ''; }
     syncMyAreaWidth();
+    updateTagPanelPosition();
   }
   function toggleMyAreaPrefFilter(pref) {
     if (myAreaPrefActive === pref) {
@@ -1899,6 +1900,7 @@
     toggleCompose(false);
     setTagPanel(CATS.some(c=>c.id===id) || window.innerWidth <= 820);
     renderPosts(); fetchPosts(id);
+    updateTagPanelPosition();
     window.scrollTo({top:0,behavior:'smooth'});
   }
   function toggleTagPanel(){
@@ -2266,6 +2268,7 @@
     document.getElementById('noticeView').classList.remove('hidden');
     document.getElementById('main').classList.remove('home');
     document.getElementById('main').classList.remove('home-my');
+    updateTagPanelPosition();
     window.scrollTo({top:0,behavior:'smooth'});
   }
   function openRulesView(){
@@ -2278,10 +2281,47 @@
     document.getElementById('rulesView').classList.remove('hidden');
     document.getElementById('main').classList.remove('home');
     document.getElementById('main').classList.remove('home-my');
+    updateTagPanelPosition();
     window.scrollTo({top:0,behavior:'smooth'});
   }
 
+  function updateTagPanelPosition() {
+    const tagPanel = document.getElementById('tagPanel');
+    if (!tagPanel) return;
 
+    const isMobile = window.innerWidth <= 820;
+    
+    if (isMobile) {
+      const homeView = document.getElementById('homeView');
+      const boardView = document.getElementById('boardView');
+      
+      // If home view is active and we have my areas set
+      if (homeView && !homeView.classList.contains('hidden') && myAreas.length > 0 && !showAllAreas) {
+        const myAreaPanel = document.getElementById('myAreaPanel');
+        if (myAreaPanel) {
+          myAreaPanel.parentNode.insertBefore(tagPanel, myAreaPanel.nextSibling);
+          return;
+        }
+      }
+      
+      // If board view is active
+      if (boardView && !boardView.classList.contains('hidden')) {
+        const crumbCard = document.getElementById('crumbCard');
+        if (crumbCard) {
+          crumbCard.parentNode.insertBefore(tagPanel, crumbCard.nextSibling);
+          return;
+        }
+      }
+    }
+    
+    // Otherwise (desktop, or other views), put it back to the sidebar
+    const sideRight = document.querySelector('.side-right');
+    if (sideRight && tagPanel.parentNode !== sideRight) {
+      sideRight.appendChild(tagPanel);
+    }
+  }
+
+  window.addEventListener('resize', updateTagPanelPosition);
 
   const optionsHtml = TAG_GROUPS.map(g=>`<optgroup label="${g.name}">${g.tags.map(k=>`<option value="${k}">${TAGS[k].name}</option>`).join('')}</optgroup>`).join('');
   document.getElementById('cTag').innerHTML = optionsHtml;
@@ -2293,6 +2333,7 @@
     const tagPanel = document.getElementById('tagPanel');
     if (tagPanel) tagPanel.classList.add('collapsed');
   }
+  updateTagPanelPosition();
   // 更新（再読み込み）したとき、直前に見ていた画面を復元する
   try{
     const sv=JSON.parse(sessionStorage.getItem('rb_view')||'null');
