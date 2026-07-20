@@ -2350,11 +2350,11 @@
     const ba=document.getElementById('boardActions'); if(ba) ba.style.display = open ? '' : 'none';
     if(open) document.getElementById('cTitle').focus();
     
-    // Hide breadcrumb card on mobile when composer is open
+    // Hide tag search card on mobile when composer is open
     if (window.innerWidth <= 820) {
-      const crumb = document.getElementById('crumbCard');
-      if (crumb) {
-        crumb.style.setProperty('display', open ? 'none' : '', 'important');
+      const tagPanel = document.getElementById('tagPanel');
+      if (tagPanel) {
+        tagPanel.style.setProperty('display', open ? 'none' : '', 'important');
       }
     }
   }
