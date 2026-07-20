@@ -389,14 +389,13 @@
     padding:10px 13px;margin-bottom:16px;font-size:12.5px;color:var(--ink);line-height:1.6}
   .caution .ic{flex:none;font-size:15px}
   .caution b{color:var(--amber);font-weight:800}
-  .caution .caution-body{flex:1;display:flex;gap:10px;align-items:center}
+  .caution .caution-body{flex:1;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
   .caution .caution-body b{display:none;flex:none;white-space:nowrap}
   .caution.open .caution-body b{display:block}
   .caution .caution-collapsed{font-weight:700}
   .caution.open .caution-collapsed{display:none}
-  .caution ul{margin:0;padding-left:16px;display:none;flex-direction:column;gap:1px}
-  .caution.open ul{display:flex}
-  .caution li{font-size:12px;line-height:1.5}
+  .caution .caution-list{display:none;font-size:12px;line-height:1.5}
+  .caution.open .caution-list{display:inline}
 
   /* Board view */
   .board-head{display:flex;align-items:center;gap:13px;margin-bottom:18px}
@@ -1149,12 +1148,7 @@
           <div class="caution-body">
             <span class="caution-collapsed">投稿時の禁止事項について</span>
             <b>禁止事項</b>
-            <ul>
-              <li>金銭のやり取り</li>
-              <li>違法薬物の譲渡・売買</li>
-              <li>電話番号・住所などの個人情報の書き込み</li>
-              <li>その他違法マナー違反はすべて通報し削除します</li>
-            </ul>
+            <span class="caution-list">：金銭のやり取り、違法薬物の譲渡・売買、電話番号・住所などの個人情報の書き込み。その他、法に触れる行為やマナー違反はすべて通報のうえ削除します。</span>
           </div>
         </div>
       </div>
