@@ -113,7 +113,7 @@
   /* マイエリア設定済みのホーム：掲示板と同じ2列（一覧＋右のタグ絞り込み） */
   main.home.home-my{grid-template-columns:1fr 200px;max-width:1140px}
   main.home.home-my aside.side-right{display:block}
-  @media(max-width:820px){main{grid-template-columns:1fr;gap:20px}}
+  @media(max-width:820px){main, main.home.home-my{grid-template-columns:1fr !important;gap:20px !important}}
 
   aside{position:sticky;top:53px;display:flex;flex-direction:column;gap:18px}
   @media(max-width:820px){aside{position:static}}
@@ -2232,6 +2232,10 @@
   document.getElementById('cTagSub2').innerHTML = '<option value="">(なし)</option>' + optionsHtml;
   document.getElementById('main').classList.toggle('home-my', myAreas.length>0 && !showAllAreas);
   renderNav(); renderPicker(); fetchMyAreaPosts(); fetchGlobalPostCounts();
+  if (window.innerWidth <= 820) {
+    const tagPanel = document.getElementById('tagPanel');
+    if (tagPanel) tagPanel.classList.add('collapsed');
+  }
   // 更新（再読み込み）したとき、直前に見ていた画面を復元する
   try{
     const sv=JSON.parse(sessionStorage.getItem('rb_view')||'null');
