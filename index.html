@@ -1698,11 +1698,7 @@
         <button class="cancel-myarea-btn" onclick="cancelMyAreaMode()">キャンセル</button>
       `;
     } else {
-      btnHtml = '';
-      if (myAreas.length > 0) {
-        btnHtml += `<button class="set-myarea-btn" style="background:var(--indigo-soft);color:var(--indigo-ink);margin-right:6px" onclick="toggleAllAreasView()">マイエリアに戻る</button>`;
-      }
-      btnHtml += `<button class="set-myarea-btn" onclick="toggleMyAreaMode()"><span class="pc-text">マイエリアを設定</span><span class="sp-text">マイエリア設定</span></button>`;
+      btnHtml = `<button class="set-myarea-btn" onclick="toggleMyAreaMode()"><span class="pc-text">マイエリアを設定</span><span class="sp-text">マイエリア設定</span></button>`;
     }
 
     // 地域リストの下に付ける3行（おしゃべり・お知らせ・禁止事項）
