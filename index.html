@@ -2348,7 +2348,6 @@
     document.getElementById('newBtnLabel').textContent = open ? '閉じる' : '新規投稿する';
     const cb=document.getElementById('cautionBox'); if(cb) cb.classList.toggle('open', open);
     const ba=document.getElementById('boardActions'); if(ba) ba.style.display = open ? '' : 'none';
-    if(open) document.getElementById('cTitle').focus();
     
     // Hide tag search card on mobile when composer is open
     if (window.innerWidth <= 820) {
