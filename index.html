@@ -1319,10 +1319,11 @@
     }
     box.innerHTML=filtered.map(p=>{
       const nm=p.name||'名無しさん';
-      const tagHtml = (p.tag || '').split(',').map(t => {
-        const tg = TAGS[t] || {name: esc(t), bg: '#eee', fg: '#555'};
+      const mainTag = (p.tag || '').split(',')[0];
+      const tagHtml = mainTag ? (() => {
+        const tg = TAGS[mainTag] || {name: esc(mainTag), bg: '#eee', fg: '#555'};
         return `<span class="tag" style="background:${tg.bg};color:${tg.fg}">${tg.name}</span>`;
-      }).join(' ');
+      })() : '';
       const prof=p.prof?`<span class="prof">${esc(p.prof)}</span>`:'';
       return `<div class="post" onclick="openBoardAndPost('${p.area}',${p.no})">
         <div class="pr">
@@ -1969,10 +1970,11 @@
     box.innerHTML=ps.map(p=>{
       const fresh=(Date.now()-p.t)<10*MIN;
       const nm=p.name||'名無しさん';
-      const tagHtml = (p.tag || '').split(',').map(t => {
-        const tg = TAGS[t] || {name: esc(t), bg: '#eee', fg: '#555'};
+      const mainTag = (p.tag || '').split(',')[0];
+      const tagHtml = mainTag ? (() => {
+        const tg = TAGS[mainTag] || {name: esc(mainTag), bg: '#eee', fg: '#555'};
         return `<span class="tag" style="background:${tg.bg};color:${tg.fg}">${tg.name}</span>`;
-      }).join(' ');
+      })() : '';
       const prof=p.prof?`<span class="prof">${esc(p.prof)}</span>`:'';
       return `<div class="post" onclick="openPost(${p.no})">
         <div class="pr">
